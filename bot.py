@@ -50,7 +50,6 @@ st.markdown(
     """
     <style>
     body {
-        background-image: url('https://cdn.pixabay.com/photo/2016/11/29/03/53/house-1867187_1280.jpg');
         background-size: cover;
         background-attachment: fixed;
     }
@@ -80,7 +79,37 @@ st.markdown(
             transform: translateY(0);
         }
     }
+    /* Marquee styles */
+    .marquee {
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        box-sizing: border-box;
+        animation: marquee 15s linear infinite;
+    }
+    .marquee img {
+        width: 150px; /* Adjust the size of the images */
+        margin-right: 10px; /* Space between images */
+    }
+    @keyframes marquee {
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
+    }
     </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# HTML for marquee
+st.markdown(
+    """
+    <div class="marquee">
+        <img src="building-8714880_1280.jpg" alt="Image 1">
+        <img src="interior-design-3564955_1280.jpg" alt="Image 2">
+        <img src="property-7046997_1280.jpg" alt="Image 3">
+        <img src="interior-4226020_1280.jpg" alt="Image 4">
+        <img src="house-1867187_1280.jpg" alt="Image 4">
+    </div>
     """,
     unsafe_allow_html=True
 )
