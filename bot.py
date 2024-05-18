@@ -104,11 +104,8 @@ st.markdown(
 st.markdown(
     """
     <div class="marquee">
-        <img src="https://github.com/qazidanishayub/FYP-Project-Guide/blob/main/building-8714880_1280.jpg" alt="Image 1">
-        <img src="https://github.com/qazidanishayub/FYP-Project-Guide/blob/main/house-1867187_1280.jpg" alt="Image 2">
-        <img src="https://github.com/qazidanishayub/FYP-Project-Guide/blob/main/interior-4226020_1280.jpg" alt="Image 3">
-        <img src="https://github.com/qazidanishayub/FYP-Project-Guide/blob/main/interior-design-3564955_1280.jpg" alt="Image 4">
-        <img src="https://github.com/qazidanishayub/FYP-Project-Guide/blob/main/property-7046997_1280.jpgg" alt="Image 5">
+        <img src="https://www.adanirealty.com/-/media/Project/Realty/Blogs/Types-Of-Residential-Properties.png" alt="Image 1">
+      
     </div>
     """,
     unsafe_allow_html=True
