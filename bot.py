@@ -100,15 +100,15 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# HTML for marquee
+# HTML for marquee - Replace `your-github-username` and `your-repo` with your actual GitHub username and repository name
 st.markdown(
     """
     <div class="marquee">
-        <img src="building-8714880_1280.jpg" alt="Image 1">
-        <img src="interior-design-3564955_1280.jpg" alt="Image 2">
-        <img src="property-7046997_1280.jpg" alt="Image 3">
-        <img src="interior-4226020_1280.jpg" alt="Image 4">
-        <img src="house-1867187_1280.jpg" alt="Image 4">
+        <img src="https://github.com/qazidanishayub/FYP-Project-Guide/blob/main/building-8714880_1280.jpg" alt="Image 1">
+        <img src="https://github.com/qazidanishayub/FYP-Project-Guide/blob/main/house-1867187_1280.jpg" alt="Image 2">
+        <img src="https://github.com/qazidanishayub/FYP-Project-Guide/blob/main/interior-4226020_1280.jpg" alt="Image 3">
+        <img src="https://github.com/qazidanishayub/FYP-Project-Guide/blob/main/interior-design-3564955_1280.jpg" alt="Image 4">
+        <img src="https://github.com/qazidanishayub/FYP-Project-Guide/blob/main/property-7046997_1280.jpgg" alt="Image 5">
     </div>
     """,
     unsafe_allow_html=True
