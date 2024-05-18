@@ -50,7 +50,7 @@ st.markdown(
     """
     <style>
     body {
-        background-image: url('https://www.softwebsolutions.com/wp-content/uploads/2018/02/ChatBot-in-Real-Estate-1.jpg');
+        background-image: url('https://cdn.pixabay.com/photo/2016/11/29/03/53/house-1867187_1280.jpg');
         background-size: cover;
         background-attachment: fixed;
     }
