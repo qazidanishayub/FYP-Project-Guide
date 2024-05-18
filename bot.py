@@ -30,20 +30,6 @@ Please generate multiple property options, each with a detailed breakdown of its
 ## Streamlit app
 st.title("Real Estate Chatbot")
 st.text("Find Your Dream Home with our AI Chatbot")
-location = st.text_input("Desired Location")
-size = st.selectbox("Desired Size", ["1 Bedroom", "2 Bedrooms", "3 Bedrooms", "4+ Bedrooms"])
-amenities = st.multiselect("Desired Amenities", ["Swimming Pool", "Gym", "Backyard", "Garage", "Balcony"])
-budget = st.text_input("Budget Range")
-submit = st.button("Submit")
-
-if submit:
-    if location.strip() != "" and size.strip() != "" and budget.strip() != "":
-        input_text = real_estate_prompt.format(location=location, size=size, amenities=", ".join(amenities), budget=budget)
-        response = get_gemini_response(input_text)
-        st.subheader("Recommended Properties")
-        st.write(response)
-    else:
-        st.error("Please provide all the required information.")
 
 # Custom CSS for background image and animations
 st.markdown(
@@ -86,6 +72,10 @@ st.markdown(
         white-space: nowrap;
         box-sizing: border-box;
         animation: marquee 15s linear infinite;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1; /* Ensure it's behind the inputs */
     }
     .marquee img {
         width: 150px; /* Adjust the size of the images */
@@ -94,6 +84,12 @@ st.markdown(
     @keyframes marquee {
         0% { transform: translateX(100%); }
         100% { transform: translateX(-100%); }
+    }
+    .input-container {
+        position: relative;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+        border-radius: 10px;
     }
     </style>
     """,
@@ -105,26 +101,30 @@ st.markdown(
     """
     <div class="marquee">
         <img src="https://www.adanirealty.com/-/media/Project/Realty/Blogs/Types-Of-Residential-Properties.png" alt="Image 1">
-      
+       
     </div>
     """,
     unsafe_allow_html=True
 )
 
-# Apply CSS classes to Streamlit elements
-st.markdown('<div class="title">Real Estate Chatbot</div>', unsafe_allow_html=True)
-st.markdown('<div class="text">Find Your Dream Home with our AI Chatbot</div>', unsafe_allow_html=True)
-st.markdown('<div class="text">Desired Location</div>', unsafe_allow_html=True)
-st.markdown('<div class="text">Desired Size</div>', unsafe_allow_html=True)
-st.markdown('<div class="text">Desired Amenities</div>', unsafe_allow_html=True)
-st.markdown('<div class="text">Budget Range</div>', unsafe_allow_html=True)
-st.markdown('<div class="text">Submit</div>', unsafe_allow_html=True)
+# Input fields with a marquee background
+st.markdown('<div class="input-container">', unsafe_allow_html=True)
+location = st.text_input("Desired Location")
+size = st.selectbox("Desired Size", ["1 Bedroom", "2 Bedrooms", "3 Bedrooms", "4+ Bedrooms"])
+amenities = st.multiselect("Desired Amenities", ["Swimming Pool", "Gym", "Backyard", "Garage", "Balcony"])
+budget = st.text_input("Budget Range")
+submit = st.button("Submit")
+st.markdown('</div>', unsafe_allow_html=True)
 
 if submit:
     if location.strip() != "" and size.strip() != "" and budget.strip() != "":
         input_text = real_estate_prompt.format(location=location, size=size, amenities=", ".join(amenities), budget=budget)
         response = get_gemini_response(input_text)
-        st.markdown('<div class="subheader">Recommended Properties</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="write">{response}</div>', unsafe_allow_html=True)
+        st.subheader("Recommended Properties")
+        st.write(response)
     else:
-        st.markdown('<div class="text">Please provide all the required information.</div>', unsafe_allow_html=True)
+        st.error("Please provide all the required information.")
+
+# Apply CSS classes to Streamlit elements
+st.markdown('<div class="title">Real Estate Chatbot</div>', unsafe_allow_html=True)
+st.markdown('<div class="text">Find Your Dream Home with our AI Chatbot</div>', unsafe_allow_html=True)
