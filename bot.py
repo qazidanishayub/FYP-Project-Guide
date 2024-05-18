@@ -44,3 +44,61 @@ if submit:
         st.write(response)
     else:
         st.error("Please provide all the required information.")
+
+# Custom CSS for background image and animations
+st.markdown(
+    """
+    <style>
+    body {
+        background-image: url('https://www.softwebsolutions.com/wp-content/uploads/2018/02/ChatBot-in-Real-Estate-1.jpg');
+        background-size: cover;
+        background-attachment: fixed;
+    }
+    .title {
+        animation: fadeInDown 2s;
+    }
+    .text, .subheader, .write {
+        animation: fadeInUp 2s;
+    }
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Apply CSS classes to Streamlit elements
+st.markdown('<div class="title">Real Estate Chatbot</div>', unsafe_allow_html=True)
+st.markdown('<div class="text">Find Your Dream Home with our AI Chatbot</div>', unsafe_allow_html=True)
+st.markdown('<div class="text">Desired Location</div>', unsafe_allow_html=True)
+st.markdown('<div class="text">Desired Size</div>', unsafe_allow_html=True)
+st.markdown('<div class="text">Desired Amenities</div>', unsafe_allow_html=True)
+st.markdown('<div class="text">Budget Range</div>', unsafe_allow_html=True)
+st.markdown('<div class="text">Submit</div>', unsafe_allow_html=True)
+
+if submit:
+    if location.strip() != "" and size.strip() != "" and budget.strip() != "":
+        input_text = real_estate_prompt.format(location=location, size=size, amenities=", ".join(amenities), budget=budget)
+        response = get_gemini_response(input_text)
+        st.markdown('<div class="subheader">Recommended Properties</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="write">{response}</div>', unsafe_allow_html=True)
+    else:
+        st.markdown('<div class="text">Please provide all the required information.</div>', unsafe_allow_html=True)
