@@ -28,7 +28,7 @@ Please generate multiple property options, each with a detailed breakdown of its
 """
 
 ## Streamlit app
-st.title("Real Estate Chatbot")
+st.title("Real Estate Chatbot GG")
 st.text("Find Your Dream Home with our AI Chatbot")
 
 # Custom CSS for background image and animations
