@@ -1,4 +1,9 @@
+import json
+import requests  
 import streamlit as st
+import base64
+import requests
+from streamlit_lottie import st_lottie  
 import google.generativeai as genai
 
 # Directly set the API key
@@ -10,6 +15,30 @@ def get_gemini_response(input_text):
     model = genai.GenerativeModel("gemini-pro")
     response = model.generate_content(input_text)
     return response.text
+ 
+
+# Function to get the base64 of the image
+def get_base64_of_bin_file(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+# Load your image and encode it in base64
+img_base64 = get_base64_of_bin_file('static/back.jpg')
+
+# Load custom CSS
+background_image_css = f"""
+<style>
+.stApp {{
+    background-image: url("data:image/jpg;base64,{img_base64}");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}}
+</style>
+"""
+
+st.markdown(background_image_css, unsafe_allow_html=True)
 
 ## Real Estate Chatbot Prompt
 real_estate_prompt = """
@@ -27,104 +56,74 @@ Budget Range: {budget}
 Please generate multiple property options, each with a detailed breakdown of its suitability and features.
 """
 
-## Streamlit app
-st.title("Real Estate Chatbot GG")
-st.text("Find Your Dream Home with our AI Chatbot")
+# Load custom CSS
+with open('style.css') as f:
+    css = f.read()
+    st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
 
-# Custom CSS for background image and animations
-st.markdown(
-    """
-    <style>
-    body {
-        background-size: cover;
-        background-attachment: fixed;
-    }
-    .title {
-        animation: fadeInDown 2s;
-    }
-    .text, .subheader, .write {
-        animation: fadeInUp 2s;
-    }
-    @keyframes fadeInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    /* Marquee styles */
-    .marquee {
-        width: 100%;
-        overflow: hidden;
-        white-space: nowrap;
-        box-sizing: border-box;
-        animation: marquee 15s linear infinite;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: -1; /* Ensure it's behind the inputs */
-    }
-    .marquee img {
-        width: 150px; /* Adjust the size of the images */
-        margin-right: 10px; /* Space between images */
-    }
-    @keyframes marquee {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-    }
-    .input-container {
-        position: relative;
-        padding: 20px;
-        background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
-        border-radius: 10px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# Load Lottie animation from URL
+def load_lottieurl(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
 
-# HTML for marquee - Replace `your-github-username` and `your-repo` with your actual GitHub username and repository name
-st.markdown(
-    """
-    <div class="marquee">
-        <img src="https://www.adanirealty.com/-/media/Project/Realty/Blogs/Types-Of-Residential-Properties.png" alt="Image 1">
-       
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+lottie_url = "https://lottie.host/0f0192c8-b733-4ca2-995d-8fb543834b0c/ltHN2qxTH8.json"
+lottie_animation = load_lottieurl(lottie_url)
 
-# Input fields with a marquee background
-st.markdown('<div class="input-container">', unsafe_allow_html=True)
-location = st.text_input("Desired Location")
-size = st.selectbox("Desired Size", ["1 Bedroom", "2 Bedrooms", "3 Bedrooms", "4+ Bedrooms"])
-amenities = st.multiselect("Desired Amenities", ["Swimming Pool", "Gym", "Backyard", "Garage", "Balcony"])
-budget = st.text_input("Budget Range")
-submit = st.button("Submit")
-st.markdown('</div>', unsafe_allow_html=True)
+# Display Lottie animation in the top right corner
+if lottie_animation:
+    st.markdown(
+        """
+        <div style="position: absolute; top: 50%; left:100%; transform: translate(-50%, -50%); width: 50px; height: 50px;">
+            <div id="lottie-animation"></div>
+        </div>
+        """, unsafe_allow_html=True
+    )
+    st_lottie(
+        lottie_animation,
+        speed=1,
+        reverse=False,
+        loop=True,
+        quality="medium",  # Adjust quality as needed: "low", "medium", "high"
+        height=150,        # Adjust height as needed
+        width=150,         # Adjust width as needed
+        key='lottie_animation'
+    )
+
+st.markdown("<div class='marquee-container'><p class='marquee'>Find Your Dream Home with our AI Chatbot</p></div>", unsafe_allow_html=True)
+
+st.markdown("<h2 class='custom-header'>Please provide the details of your ideal home below:</h2>", unsafe_allow_html=True)
+
+with st.form(key='real_estate_form'):
+    location = st.text_input("Desired Location")
+    size = st.selectbox("Desired Size", ["1 Bedroom", "2 Bedrooms", "3 Bedrooms", "4+ Bedrooms"])
+    amenities = st.multiselect("Desired Amenities", ["Swimming Pool", "Gym", "Backyard", "Garage", "Balcony"])
+    budget = st.text_input("Budget Range")
+    submit = st.form_submit_button("Submit")
+
+# JavaScript to apply effect when amenity is selected
+js_code = """
+<script>
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                this.parentElement.classList.add('amenity-selected');
+            } else {
+                this.parentElement.classList.remove('amenity-selected');
+            }
+        });
+    });
+</script>
+"""
+
+st.markdown(js_code, unsafe_allow_html=True)
 
 if submit:
     if location.strip() != "" and size.strip() != "" and budget.strip() != "":
         input_text = real_estate_prompt.format(location=location, size=size, amenities=", ".join(amenities), budget=budget)
         response = get_gemini_response(input_text)
-        st.subheader("Recommended Properties")
-        st.write(response)
+        st.markdown("<div class='response-section'><p class='response-text'>Recommended Properties:</p><p class='response-text'>{}</p></div>".format(response), unsafe_allow_html=True)
     else:
         st.error("Please provide all the required information.")
-
-# Apply CSS classes to Streamlit elements
-st.markdown('<div class="title">Real Estate Chatbot</div>', unsafe_allow_html=True)
-st.markdown('<div class="text">Find Your Dream Home with our AI Chatbot</div>', unsafe_allow_html=True)
